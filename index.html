@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="manifest" href="/manifest.json">
 <style>
   :root{
     --bg:#090c12;
@@ -407,6 +408,7 @@
     <div class="clock" id="clockDisplay">--:--:--</div>
     <div class="top-actions">
       <button class="btn ghost small" id="soundBtn" title="Activer/couper le son"><span class="lbl">Son : activé</span></button>
+      <button class="btn ghost small" onclick="enablePushNotifications()">Activer les alertes</button>
       <button class="btn" onclick="openSettings()" title="Paramètres"><span class="lbl">Paramètres</span></button>
       <button class="btn danger" onclick="openNewShiftModal()" title="Démarrer un nouveau shift — remet à zéro équipiers, historique et alertes"><span class="lbl">Nouveau shift</span></button>
       <button class="btn" onclick="openTransferModal()" title="Transférer le shift vers un autre téléphone (QR code)"><span class="lbl">Transférer shift</span></button>
@@ -863,5 +865,6 @@ async function submitXferImport(){const e=document.getElementById("xferReceiveFe
       <div class="card-actions">${m}</div>
     </div>`}).join("")}function render(){updateSalaryLedger(),renderChips(),renderKPIs(),renderTicker(),renderHistory(),renderGrid(),document.getElementById("salaryOverlay").classList.contains("show")&&renderSalaryDashboard(),saveState()}function tickClock(){document.getElementById("clockDisplay").textContent=new Date().toLocaleTimeString("fr-FR")}function tick(){audioCtx&&audioCtx.state==="suspended"&&audioCtx.resume();employees.forEach(e=>{if(e.earlyClosed)return;const t=computeStatus(e);handleStatusTransition(e,e.prevStatus,t),e.prevStatus=t;const n=breakStatus(e);handleBreakTransition(e,e.prevBreakStatus,n),e.prevBreakStatus=n;const a=pauseReadyStatus(e);handlePauseReadyTransition(e,e.prevPauseReady,a),e.prevPauseReady=a}),tickClock(),render()}document.addEventListener("contextmenu",e=>e.preventDefault()),document.addEventListener("keydown",e=>{const t=e.key;(t==="F12"||(e.ctrlKey||e.metaKey)&&e.shiftKey&&["I","J","C","i","j","c"].includes(t)||(e.ctrlKey||e.metaKey)&&["U","u","S","s"].includes(t))&&e.preventDefault()}),(async function(){await loadState(),document.getElementById("footOrange").textContent=fmtHM(settings.orangeMin),document.getElementById("footRed").textContent=fmtHM(settings.redMin),document.getElementById("footBreak").textContent=fmtHM(settings.breakMaxMin),document.getElementById("footAnomaly").textContent=fmtHM(settings.breakAnomalyMin),document.getElementById("footResume").textContent=fmtHM(settings.resumeMinBreakMin),updateSoundBtn(),updateRestaurantName(),"Notification"in window&&Notification.permission==="default"&&settings.notifEnabled&&Notification.requestPermission().then(e=>{settings.notifEnabled=e==="granted",saveState()}),employees.forEach(t=>{t.prevStatus=computeStatus(t),t.prevBreakStatus=breakStatus(t),t.prevPauseReady=pauseReadyStatus(t)}),tickClock(),render(),setInterval(tick,1e3),requestWakeLock(),[...document.querySelectorAll(".overlay")].forEach(t=>{t.addEventListener("click",n=>{n.target===t&&t.classList.remove("show")})})})();
 </script>
+  <script src="push-client.js"></script>
 </body>
 </html>
